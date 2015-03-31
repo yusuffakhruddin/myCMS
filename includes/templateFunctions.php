@@ -1,28 +1,55 @@
 <?php 
+
 require_once('cmsBase.php');
 class TemplateFunctions extends CmsBase {
-	// Semua fungsi terkait dengan
-	// pengaturan template ada di sini
 
-	var $templateName ='default'; //hanya dapat diakses di kelas templaeFunction
-	function show(){
+	var $templateName = 'default';
+	var $widgetPositions = array();
+
+	function show() {
 		require_once($this->getCurrentTemplatePath() . 'template.php');
-
 	}
-	function getCurrentTemplatePath(){
+
+	function getCurrentTemplatePath() {
 		//untuk mendapatkan nama folder tempat menyimpan TEMPLATE
 		return 'templates/' . $this->templateName . '/';
 	}
-	function setTemplate($templateName){ //template disini adalah parameter
+
+	function setTemplate($templateName) {
 		$this->templateName = $templateName;
 	}
+
+
 	//fungsi untuk menggabungkan TEMPLATE
-	//dengan management content
-	function appOutput(){
+	//dengan mangement CONTENT
+	function appOutput() {
 		require_once('includes/cmsApplication.php');
 		$app = new CmsApplication();
 		$app->run();
+	}
 
+	function widgetOutput($position='default') {
+		//echo 'Di sini akan ditampilkan widget secara dinamis';
+		if(!empty($this->widgetPositions[$position]))
+		{
+			$widgets=$this->widgetPositions[$position];
+			foreach($widgets as $widgetName)
+			{
+				require_once('widgets/'.$widgetName.'/'.$widgetName.'.php');
+				$widgetclass=ucfirst($widgetName).'Widget';
+				$widget=new $widgetclass();
+				$widget->run($widgetName);
+			}
+		}
+	}
+
+	function setWidget($position,$widgetName)
+	{
+		if(empty($this->widgetPositions[$position]))
+		{
+			$this->widgetPositions[$position]=array($widgetName);
+		} else {
+			array_push($this->widgetPositions[$position],$widgetName);
+		}
 	}
 }
-?>

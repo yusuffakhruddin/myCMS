@@ -1,7 +1,6 @@
 <?php
 require_once('cmsBase.php');
 class CmsApplication extends CmsBase {
-//Anything here will be accesible in main functionality of CMS
 
 
 function run(){ //isinya adalah index.php
