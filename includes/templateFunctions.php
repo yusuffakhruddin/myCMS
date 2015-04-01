@@ -22,11 +22,15 @@ class TemplateFunctions extends CmsBase {
 
 	//fungsi untuk menggabungkan TEMPLATE
 	//dengan mangement CONTENT
-	function appOutput() {
-		require_once('includes/cmsApplication.php');
-		$app = new CmsApplication();
-		$app->run();
-	}
+	function appOutput()
+{
+	$appname = (isset($_REQUEST['app']))?$_REQUEST['app']:'default';
+	require_once('apps/'.$appname.'/'.$appname.'.php');
+	$application = ucfirst($appname).'Application';
+	$app = new $application();
+	$app->run();
+}
+
 
 	function widgetOutput($position='default') {
 		//echo 'Di sini akan ditampilkan widget secara dinamis';
